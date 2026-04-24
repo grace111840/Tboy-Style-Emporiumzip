@@ -104,6 +104,7 @@ export function Footer() {
           <div className="flex space-x-6">
             <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>
+            <Link href="/admin" className="hover:text-primary transition-colors">Atelier Admin</Link>
           </div>
         </div>
       </div>
