@@ -7,13 +7,15 @@ const router: IRouter = Router();
 
 const DEFAULTS = {
   id: 1,
-  heroHeadline: "The New Classic",
+  heroHeadline: "Wear The Moment.",
   heroSubheading:
-    "Unmistakably modern. Confident and refined. Step into the atelier.",
-  heroCtaPrimary: "SHOP NOW",
-  heroCtaSecondary: "EXPLORE COLLECTION",
-  whatsappNumber: "1234567890",
-  contactEmail: "atelier@tboysclothing.com",
+    "Premium streetwear, formal & casual fits — handcrafted in Lagos for the bold and the brilliant.",
+  heroCtaPrimary: "SHOP NEW DROPS",
+  heroCtaSecondary: "EXPLORE LOOKBOOK",
+  whatsappNumber: "2348012345678",
+  contactEmail: "orders@tboysclothing.ng",
+  promoBanner: "GET 10% OFF YOUR FIRST ORDER — USE CODE TBOYS10 AT CHECKOUT",
+  tagline: "Wear the moment. Own the room.",
 };
 
 async function getOrInit() {

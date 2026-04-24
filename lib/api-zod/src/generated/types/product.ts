@@ -11,9 +11,13 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  oldPrice?: number | null;
   category: ProductCategory;
   image: string;
   description: string;
+  styleTip?: string | null;
   sizes: string[];
   popularity: number;
+  stockCount: number;
+  isNew: boolean;
 }

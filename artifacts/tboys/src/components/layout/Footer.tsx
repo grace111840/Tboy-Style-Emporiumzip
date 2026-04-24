@@ -1,13 +1,15 @@
 import { Link } from "wouter";
-import { FaInstagram, FaTwitter, FaTiktok, FaFacebookF } from "react-icons/fa";
+import { FaInstagram, FaTwitter, FaTiktok, FaWhatsapp } from "react-icons/fa";
 import { useState } from "react";
-import { useCreateSubscriber } from "@workspace/api-client-react";
+import { useCreateSubscriber, useGetSiteContent } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 
 export function Footer() {
   const [email, setEmail] = useState("");
   const { mutateAsync: subscribe, isPending } = useCreateSubscriber();
+  const { data: site } = useGetSiteContent();
   const { toast } = useToast();
+  const tagline = site?.tagline ?? "Wear the moment. Own the room.";
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,10 +19,10 @@ export function Footer() {
       await subscribe({ data: { email: trimmed } });
       setEmail("");
       toast({
-        title: "You're on the list",
-        description: "Welcome to the atelier — exclusive previews are on the way.",
+        title: "You're in.",
+        description: "Welcome to the TBOY'S inner circle. Drops and exclusive offers coming your way.",
       });
-    } catch (err) {
+    } catch {
       toast({
         title: "Could not subscribe",
         description: "Please check your email address and try again.",
@@ -30,81 +32,84 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-background border-t border-border pt-20 pb-10">
+    <footer className="bg-black border-t border-border pt-20 pb-10">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-1">
-            <Link href="/" className="font-serif text-3xl font-bold tracking-widest text-primary block mb-6">
+            <Link href="/" className="font-serif text-3xl font-bold tracking-[0.25em] text-gold block mb-6">
               TBOY'S
             </Link>
-            <p className="text-muted-foreground text-sm leading-relaxed mb-6 max-w-sm">
-              Walking into TBOY'S is like stepping into a private atelier on a quiet Mayfair side street. Confident, refined, and unmistakably modern.
+            <p className="text-muted-foreground text-sm leading-relaxed mb-3 max-w-sm">
+              {tagline}
             </p>
-            <div className="flex items-center space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2 -ml-2">
-                <FaInstagram size={20} />
+            <p className="text-xs text-muted-foreground/70 mb-6">Premium Nigerian fashion. Made for the bold.</p>
+            <div className="flex items-center gap-2">
+              <a href="#" aria-label="Instagram" className="w-9 h-9 border border-border hover:border-gold hover:text-gold flex items-center justify-center transition-colors">
+                <FaInstagram size={16} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2">
-                <FaTwitter size={20} />
+              <a href="#" aria-label="TikTok" className="w-9 h-9 border border-border hover:border-gold hover:text-gold flex items-center justify-center transition-colors">
+                <FaTiktok size={16} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2">
-                <FaTiktok size={20} />
+              <a href="#" aria-label="Twitter" className="w-9 h-9 border border-border hover:border-gold hover:text-gold flex items-center justify-center transition-colors">
+                <FaTwitter size={16} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2">
-                <FaFacebookF size={20} />
+              <a href="#" aria-label="WhatsApp" className="w-9 h-9 border border-border hover:border-gold hover:text-gold flex items-center justify-center transition-colors">
+                <FaWhatsapp size={16} />
               </a>
             </div>
           </div>
 
           <div>
-            <h4 className="font-serif text-lg mb-6">Shop</h4>
-            <ul className="space-y-4 text-sm text-muted-foreground">
-              <li><Link href="/collections" className="hover:text-primary transition-colors">New Arrivals</Link></li>
-              <li><Link href="/shop" className="hover:text-primary transition-colors">All Products</Link></li>
-              <li><Link href="/shop?category=Luxury" className="hover:text-primary transition-colors">Luxury</Link></li>
-              <li><Link href="/shop?category=Streetwear" className="hover:text-primary transition-colors">Streetwear</Link></li>
+            <h4 className="font-serif text-base mb-5 text-gold">Shop</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li><Link href="/shop" className="hover:text-gold transition-colors">All Products</Link></li>
+              <li><Link href="/collections" className="hover:text-gold transition-colors">Collections</Link></li>
+              <li><Link href="/lookbook" className="hover:text-gold transition-colors">Lookbook</Link></li>
+              <li><Link href="/shop?category=Streetwear" className="hover:text-gold transition-colors">Streetwear</Link></li>
+              <li><Link href="/shop?category=Formal" className="hover:text-gold transition-colors">Formal</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-serif text-lg mb-6">Support</h4>
-            <ul className="space-y-4 text-sm text-muted-foreground">
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Shipping & Returns</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Size Guide</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">FAQ</a></li>
+            <h4 className="font-serif text-base mb-5 text-gold">Help</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li><Link href="/faq" className="hover:text-gold transition-colors">FAQ</Link></li>
+              <li><Link href="/faq" className="hover:text-gold transition-colors">Delivery</Link></li>
+              <li><Link href="/faq" className="hover:text-gold transition-colors">Sizing</Link></li>
+              <li><Link href="/faq" className="hover:text-gold transition-colors">Returns</Link></li>
+              <li><Link href="/contact" className="hover:text-gold transition-colors">Contact</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-serif text-lg mb-6">The Atelier</h4>
-            <p className="text-muted-foreground text-sm mb-4">Subscribe to receive updates, access to exclusive deals, and more.</p>
-            <form className="flex" onSubmit={handleSubscribe}>
+            <h4 className="font-serif text-base mb-5 text-gold">Join the List</h4>
+            <p className="text-muted-foreground text-sm mb-4">Drop alerts, exclusive offers, 10% off your first order.</p>
+            <form className="flex border border-border focus-within:border-gold transition-colors" onSubmit={handleSubscribe}>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email address"
-                className="bg-transparent border-b border-border py-2 px-0 text-sm w-full focus:outline-none focus:border-primary transition-colors rounded-none placeholder:text-muted-foreground/60"
+                placeholder="your@email.com"
+                className="bg-transparent py-2.5 px-3 text-sm w-full focus:outline-none placeholder:text-muted-foreground/60"
               />
               <button
                 type="submit"
                 disabled={isPending}
-                className="border-b border-border py-2 px-4 text-sm font-medium hover:text-primary hover:border-primary transition-colors disabled:opacity-50"
+                className="bg-gold text-black py-2.5 px-4 text-xs font-bold tracking-widest hover:bg-gold-soft transition-colors disabled:opacity-50"
               >
-                {isPending ? "…" : "SUBSCRIBE"}
+                {isPending ? "…" : "JOIN"}
               </button>
             </form>
           </div>
         </div>
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground space-y-4 md:space-y-0">
-          <p>&copy; {new Date().getFullYear()} TBOY'S CLOTHING BRAND. All rights reserved.</p>
-          <div className="flex space-x-6">
-            <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>
-            <Link href="/admin" className="hover:text-primary transition-colors">Atelier Admin</Link>
+          <p>&copy; {new Date().getFullYear()} TBOY'S CLOTHING. Crafted in Lagos.</p>
+          <div className="flex space-x-5">
+            <a href="#" className="hover:text-gold transition-colors">Privacy</a>
+            <a href="#" className="hover:text-gold transition-colors">Terms</a>
+            <Link href="/admin" className="hover:text-gold transition-colors">Admin</Link>
           </div>
         </div>
       </div>

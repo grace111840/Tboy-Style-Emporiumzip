@@ -23,11 +23,15 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  oldPrice?: number | null;
   category: ProductCategory;
   image: string;
   description: string;
+  styleTip?: string | null;
   sizes: string[];
   popularity: number;
+  stockCount: number;
+  isNew: boolean;
 }
 
 export type ProductInputCategory =
@@ -45,16 +49,22 @@ export interface ProductInput {
   name: string;
   /** @minimum 0 */
   price: number;
+  /** @minimum 0 */
+  oldPrice?: number | null;
   category: ProductInputCategory;
   /** @minLength 1 */
   image: string;
   description: string;
+  styleTip?: string | null;
   sizes: string[];
   /**
    * @minimum 0
    * @maximum 100
    */
   popularity: number;
+  /** @minimum 0 */
+  stockCount: number;
+  isNew: boolean;
 }
 
 export interface Subscriber {
@@ -74,6 +84,8 @@ export interface SiteContent {
   heroCtaSecondary: string;
   whatsappNumber: string;
   contactEmail: string;
+  promoBanner: string;
+  tagline: string;
 }
 
 export interface SiteContentInput {
@@ -89,4 +101,39 @@ export interface SiteContentInput {
   whatsappNumber: string;
   /** @minLength 1 */
   contactEmail: string;
+  /** @minLength 1 */
+  promoBanner: string;
+  /** @minLength 1 */
+  tagline: string;
 }
+
+export interface Review {
+  id: number;
+  productId: string;
+  author: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  text: string;
+  createdAt: string;
+}
+
+export interface ReviewInput {
+  /** @minLength 1 */
+  productId: string;
+  /** @minLength 1 */
+  author: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  /** @minLength 1 */
+  text: string;
+}
+
+export type ListReviewsParams = {
+  productId?: string;
+};

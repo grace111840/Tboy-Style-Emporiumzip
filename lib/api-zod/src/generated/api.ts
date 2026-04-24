@@ -8,7 +8,6 @@
 import * as zod from "zod";
 
 /**
- * Returns server health status
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
@@ -22,11 +21,15 @@ export const ListProductsResponseItem = zod.object({
   id: zod.string(),
   name: zod.string(),
   price: zod.number(),
+  oldPrice: zod.number().nullish(),
   category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
   image: zod.string(),
   description: zod.string(),
+  styleTip: zod.string().nullish(),
   sizes: zod.array(zod.string()),
   popularity: zod.number(),
+  stockCount: zod.number(),
+  isNew: zod.boolean(),
 });
 export const ListProductsResponse = zod.array(ListProductsResponseItem);
 
@@ -36,20 +39,28 @@ export const ListProductsResponse = zod.array(ListProductsResponseItem);
 
 export const createProductBodyPriceMin = 0;
 
+export const createProductBodyOldPriceMin = 0;
+
 export const createProductBodyPopularityMin = 0;
 export const createProductBodyPopularityMax = 100;
+
+export const createProductBodyStockCountMin = 0;
 
 export const CreateProductBody = zod.object({
   name: zod.string().min(1),
   price: zod.number().min(createProductBodyPriceMin),
+  oldPrice: zod.number().min(createProductBodyOldPriceMin).nullish(),
   category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
   image: zod.string().min(1),
   description: zod.string(),
+  styleTip: zod.string().nullish(),
   sizes: zod.array(zod.string()),
   popularity: zod
     .number()
     .min(createProductBodyPopularityMin)
     .max(createProductBodyPopularityMax),
+  stockCount: zod.number().min(createProductBodyStockCountMin),
+  isNew: zod.boolean(),
 });
 
 /**
@@ -63,11 +74,15 @@ export const GetProductResponse = zod.object({
   id: zod.string(),
   name: zod.string(),
   price: zod.number(),
+  oldPrice: zod.number().nullish(),
   category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
   image: zod.string(),
   description: zod.string(),
+  styleTip: zod.string().nullish(),
   sizes: zod.array(zod.string()),
   popularity: zod.number(),
+  stockCount: zod.number(),
+  isNew: zod.boolean(),
 });
 
 /**
@@ -79,31 +94,43 @@ export const UpdateProductParams = zod.object({
 
 export const updateProductBodyPriceMin = 0;
 
+export const updateProductBodyOldPriceMin = 0;
+
 export const updateProductBodyPopularityMin = 0;
 export const updateProductBodyPopularityMax = 100;
+
+export const updateProductBodyStockCountMin = 0;
 
 export const UpdateProductBody = zod.object({
   name: zod.string().min(1),
   price: zod.number().min(updateProductBodyPriceMin),
+  oldPrice: zod.number().min(updateProductBodyOldPriceMin).nullish(),
   category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
   image: zod.string().min(1),
   description: zod.string(),
+  styleTip: zod.string().nullish(),
   sizes: zod.array(zod.string()),
   popularity: zod
     .number()
     .min(updateProductBodyPopularityMin)
     .max(updateProductBodyPopularityMax),
+  stockCount: zod.number().min(updateProductBodyStockCountMin),
+  isNew: zod.boolean(),
 });
 
 export const UpdateProductResponse = zod.object({
   id: zod.string(),
   name: zod.string(),
   price: zod.number(),
+  oldPrice: zod.number().nullish(),
   category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
   image: zod.string(),
   description: zod.string(),
+  styleTip: zod.string().nullish(),
   sizes: zod.array(zod.string()),
   popularity: zod.number(),
+  stockCount: zod.number(),
+  isNew: zod.boolean(),
 });
 
 /**
@@ -140,6 +167,8 @@ export const GetSiteContentResponse = zod.object({
   heroCtaSecondary: zod.string(),
   whatsappNumber: zod.string(),
   contactEmail: zod.string(),
+  promoBanner: zod.string(),
+  tagline: zod.string(),
 });
 
 /**
@@ -153,6 +182,8 @@ export const UpdateSiteContentBody = zod.object({
   heroCtaSecondary: zod.string().min(1),
   whatsappNumber: zod.string().min(1),
   contactEmail: zod.string().min(1),
+  promoBanner: zod.string().min(1),
+  tagline: zod.string().min(1),
 });
 
 export const UpdateSiteContentResponse = zod.object({
@@ -162,4 +193,38 @@ export const UpdateSiteContentResponse = zod.object({
   heroCtaSecondary: zod.string(),
   whatsappNumber: zod.string(),
   contactEmail: zod.string(),
+  promoBanner: zod.string(),
+  tagline: zod.string(),
+});
+
+/**
+ * @summary List all reviews
+ */
+export const ListReviewsQueryParams = zod.object({
+  productId: zod.coerce.string().optional(),
+});
+
+export const listReviewsResponseRatingMax = 5;
+
+export const ListReviewsResponseItem = zod.object({
+  id: zod.number(),
+  productId: zod.string(),
+  author: zod.string(),
+  rating: zod.number().min(1).max(listReviewsResponseRatingMax),
+  text: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+export const ListReviewsResponse = zod.array(ListReviewsResponseItem);
+
+/**
+ * @summary Submit a review
+ */
+
+export const createReviewBodyRatingMax = 5;
+
+export const CreateReviewBody = zod.object({
+  productId: zod.string().min(1),
+  author: zod.string().min(1),
+  rating: zod.number().min(1).max(createReviewBodyRatingMax),
+  text: zod.string().min(1),
 });

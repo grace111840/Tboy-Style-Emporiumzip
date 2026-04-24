@@ -16,13 +16,14 @@ tags:
     description: Newsletter subscribers
   - name: site-content
     description: Editable site content
+  - name: reviews
+    description: Customer reviews
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -181,6 +182,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SiteContent"
+  /reviews:
+    get:
+      operationId: listReviews
+      tags: [reviews]
+      summary: List all reviews
+      parameters:
+        - name: productId
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Review"
+    post:
+      operationId: createReview
+      tags: [reviews]
+      summary: Submit a review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Review"
 components:
   schemas:
     HealthStatus:
@@ -188,30 +226,26 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
     Product:
       type: object
       properties:
-        id:
-          type: string
-        name:
-          type: string
-        price:
-          type: number
+        id: { type: string }
+        name: { type: string }
+        price: { type: number }
+        oldPrice: { type: number, nullable: true }
         category:
           type: string
           enum: [Casual, Luxury, Streetwear, Formal]
-        image:
-          type: string
-        description:
-          type: string
+        image: { type: string }
+        description: { type: string }
+        styleTip: { type: string, nullable: true }
         sizes:
           type: array
-          items:
-            type: string
-        popularity:
-          type: integer
+          items: { type: string }
+        popularity: { type: integer }
+        stockCount: { type: integer }
+        isNew: { type: boolean }
       required:
         - id
         - name
@@ -221,31 +255,26 @@ components:
         - description
         - sizes
         - popularity
+        - stockCount
+        - isNew
     ProductInput:
       type: object
       properties:
-        name:
-          type: string
-          minLength: 1
-        price:
-          type: number
-          minimum: 0
+        name: { type: string, minLength: 1 }
+        price: { type: number, minimum: 0 }
+        oldPrice: { type: number, nullable: true, minimum: 0 }
         category:
           type: string
           enum: [Casual, Luxury, Streetwear, Formal]
-        image:
-          type: string
-          minLength: 1
-        description:
-          type: string
+        image: { type: string, minLength: 1 }
+        description: { type: string }
+        styleTip: { type: string, nullable: true }
         sizes:
           type: array
-          items:
-            type: string
-        popularity:
-          type: integer
-          minimum: 0
-          maximum: 100
+          items: { type: string }
+        popularity: { type: integer, minimum: 0, maximum: 100 }
+        stockCount: { type: integer, minimum: 0 }
+        isNew: { type: boolean }
       required:
         - name
         - price
@@ -254,43 +283,31 @@ components:
         - description
         - sizes
         - popularity
+        - stockCount
+        - isNew
     Subscriber:
       type: object
       properties:
-        id:
-          type: integer
-        email:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-      required:
-        - id
-        - email
-        - createdAt
+        id: { type: integer }
+        email: { type: string }
+        createdAt: { type: string, format: date-time }
+      required: [id, email, createdAt]
     SubscriberInput:
       type: object
       properties:
-        email:
-          type: string
-          format: email
-      required:
-        - email
+        email: { type: string, format: email }
+      required: [email]
     SiteContent:
       type: object
       properties:
-        heroHeadline:
-          type: string
-        heroSubheading:
-          type: string
-        heroCtaPrimary:
-          type: string
-        heroCtaSecondary:
-          type: string
-        whatsappNumber:
-          type: string
-        contactEmail:
-          type: string
+        heroHeadline: { type: string }
+        heroSubheading: { type: string }
+        heroCtaPrimary: { type: string }
+        heroCtaSecondary: { type: string }
+        whatsappNumber: { type: string }
+        contactEmail: { type: string }
+        promoBanner: { type: string }
+        tagline: { type: string }
       required:
         - heroHeadline
         - heroSubheading
@@ -298,27 +315,19 @@ components:
         - heroCtaSecondary
         - whatsappNumber
         - contactEmail
+        - promoBanner
+        - tagline
     SiteContentInput:
       type: object
       properties:
-        heroHeadline:
-          type: string
-          minLength: 1
-        heroSubheading:
-          type: string
-          minLength: 1
-        heroCtaPrimary:
-          type: string
-          minLength: 1
-        heroCtaSecondary:
-          type: string
-          minLength: 1
-        whatsappNumber:
-          type: string
-          minLength: 1
-        contactEmail:
-          type: string
-          minLength: 1
+        heroHeadline: { type: string, minLength: 1 }
+        heroSubheading: { type: string, minLength: 1 }
+        heroCtaPrimary: { type: string, minLength: 1 }
+        heroCtaSecondary: { type: string, minLength: 1 }
+        whatsappNumber: { type: string, minLength: 1 }
+        contactEmail: { type: string, minLength: 1 }
+        promoBanner: { type: string, minLength: 1 }
+        tagline: { type: string, minLength: 1 }
       required:
         - heroHeadline
         - heroSubheading
@@ -326,3 +335,23 @@ components:
         - heroCtaSecondary
         - whatsappNumber
         - contactEmail
+        - promoBanner
+        - tagline
+    Review:
+      type: object
+      properties:
+        id: { type: integer }
+        productId: { type: string }
+        author: { type: string }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        text: { type: string }
+        createdAt: { type: string, format: date-time }
+      required: [id, productId, author, rating, text, createdAt]
+    ReviewInput:
+      type: object
+      properties:
+        productId: { type: string, minLength: 1 }
+        author: { type: string, minLength: 1 }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        text: { type: string, minLength: 1 }
+      required: [productId, author, rating, text]

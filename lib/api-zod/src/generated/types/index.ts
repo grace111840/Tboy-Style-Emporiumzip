@@ -7,10 +7,13 @@
  */
 
 export * from "./healthStatus";
+export * from "./listReviewsParams";
 export * from "./product";
 export * from "./productCategory";
 export * from "./productInput";
 export * from "./productInputCategory";
+export * from "./review";
+export * from "./reviewInput";
 export * from "./siteContent";
 export * from "./siteContentInput";
 export * from "./subscriber";

@@ -12,14 +12,20 @@ export interface ProductInput {
   name: string;
   /** @minimum 0 */
   price: number;
+  /** @minimum 0 */
+  oldPrice?: number | null;
   category: ProductInputCategory;
   /** @minLength 1 */
   image: string;
   description: string;
+  styleTip?: string | null;
   sizes: string[];
   /**
    * @minimum 0
    * @maximum 100
    */
   popularity: number;
+  /** @minimum 0 */
+  stockCount: number;
+  isNew: boolean;
 }

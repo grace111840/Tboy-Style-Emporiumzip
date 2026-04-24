@@ -13,4 +13,6 @@ export interface SiteContent {
   heroCtaSecondary: string;
   whatsappNumber: string;
   contactEmail: string;
+  promoBanner: string;
+  tagline: string;
 }

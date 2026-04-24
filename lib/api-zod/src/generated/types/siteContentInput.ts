@@ -19,4 +19,8 @@ export interface SiteContentInput {
   whatsappNumber: string;
   /** @minLength 1 */
   contactEmail: string;
+  /** @minLength 1 */
+  promoBanner: string;
+  /** @minLength 1 */
+  tagline: string;
 }
