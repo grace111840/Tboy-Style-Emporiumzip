@@ -1,0 +1,62 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "FCiC-NTricW7iK000pxBC"
+uri = "file://artifacts/tboys/public/images/hero-1.png"
+type = "image"
+title = "Man in deep blue suit"
+
+[[generated]]
+id = "1q62659RcxuRuW1YrtdqG"
+uri = "file://artifacts/tboys/public/images/hero-2.png"
+type = "image"
+title = "Premium fabric texture close-up"
+
+[[generated]]
+id = "YmCZsacFOPRjbfPo3BYNO"
+uri = "file://artifacts/tboys/public/images/casual-1.png"
+type = "image"
+title = "White t-shirt grey trousers"
+
+[[generated]]
+id = "cxeqzJmrfraOjE7G5PQZX"
+uri = "file://artifacts/tboys/public/images/casual-2.png"
+type = "image"
+title = "Cream cashmere sweater"
+
+[[generated]]
+id = "4CSSNsXitAJjp6zfImtV3"
+uri = "file://artifacts/tboys/public/images/luxury-1.png"
+type = "image"
+title = "Structured silk wool outfit"
+
+[[generated]]
+id = "bE5XtyVcRQeGe8HX7jDqQ"
+uri = "file://artifacts/tboys/public/images/luxury-2.png"
+type = "image"
+title = "Deep navy tailored coat"
+
+[[generated]]
+id = "SF-TjKh0cEuwZex6fCi2h"
+uri = "file://artifacts/tboys/public/images/street-1.png"
+type = "image"
+title = "Premium oversized hoodie"
+
+[[generated]]
+id = "8T9RXhZE_z9-uOxS6-3_b"
+uri = "file://artifacts/tboys/public/images/street-2.png"
+type = "image"
+title = "Technical jacket modern streetwear"
+
+[[generated]]
+id = "XDTYaW1HyMbs1iN8yrv6_"
+uri = "file://artifacts/tboys/public/images/formal-1.png"
+type = "image"
+title = "Impeccable black tuxedo"
+
+[[generated]]
+id = "zbJViBZSNPMo8slg2Qwj7"
+uri = "file://artifacts/tboys/public/images/formal-2.png"
+type = "image"
+title = "Elegant velvet dinner jacket"

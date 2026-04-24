@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "TBOY'S Clothing"
+version = "1.0.0"
+id = "artifacts/tboys"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25852
+
+[services.development]
+run = "pnpm --filter @workspace/tboys run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/tboys", "run", "build" ]
+publicDir = "artifacts/tboys/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25852"
+BASE_PATH = "/"
