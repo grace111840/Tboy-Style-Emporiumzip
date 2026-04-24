@@ -14,3 +14,152 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * @summary List products
+ */
+export const ListProductsResponseItem = zod.object({
+  id: zod.string(),
+  name: zod.string(),
+  price: zod.number(),
+  category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
+  image: zod.string(),
+  description: zod.string(),
+  sizes: zod.array(zod.string()),
+  popularity: zod.number(),
+});
+export const ListProductsResponse = zod.array(ListProductsResponseItem);
+
+/**
+ * @summary Create a new product
+ */
+
+export const createProductBodyPriceMin = 0;
+
+export const createProductBodyPopularityMin = 0;
+export const createProductBodyPopularityMax = 100;
+
+export const CreateProductBody = zod.object({
+  name: zod.string().min(1),
+  price: zod.number().min(createProductBodyPriceMin),
+  category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
+  image: zod.string().min(1),
+  description: zod.string(),
+  sizes: zod.array(zod.string()),
+  popularity: zod
+    .number()
+    .min(createProductBodyPopularityMin)
+    .max(createProductBodyPopularityMax),
+});
+
+/**
+ * @summary Get a product by id
+ */
+export const GetProductParams = zod.object({
+  id: zod.coerce.string(),
+});
+
+export const GetProductResponse = zod.object({
+  id: zod.string(),
+  name: zod.string(),
+  price: zod.number(),
+  category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
+  image: zod.string(),
+  description: zod.string(),
+  sizes: zod.array(zod.string()),
+  popularity: zod.number(),
+});
+
+/**
+ * @summary Update a product
+ */
+export const UpdateProductParams = zod.object({
+  id: zod.coerce.string(),
+});
+
+export const updateProductBodyPriceMin = 0;
+
+export const updateProductBodyPopularityMin = 0;
+export const updateProductBodyPopularityMax = 100;
+
+export const UpdateProductBody = zod.object({
+  name: zod.string().min(1),
+  price: zod.number().min(updateProductBodyPriceMin),
+  category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
+  image: zod.string().min(1),
+  description: zod.string(),
+  sizes: zod.array(zod.string()),
+  popularity: zod
+    .number()
+    .min(updateProductBodyPopularityMin)
+    .max(updateProductBodyPopularityMax),
+});
+
+export const UpdateProductResponse = zod.object({
+  id: zod.string(),
+  name: zod.string(),
+  price: zod.number(),
+  category: zod.enum(["Casual", "Luxury", "Streetwear", "Formal"]),
+  image: zod.string(),
+  description: zod.string(),
+  sizes: zod.array(zod.string()),
+  popularity: zod.number(),
+});
+
+/**
+ * @summary Delete a product
+ */
+export const DeleteProductParams = zod.object({
+  id: zod.coerce.string(),
+});
+
+/**
+ * @summary List subscribers
+ */
+export const ListSubscribersResponseItem = zod.object({
+  id: zod.number(),
+  email: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+export const ListSubscribersResponse = zod.array(ListSubscribersResponseItem);
+
+/**
+ * @summary Subscribe an email
+ */
+export const CreateSubscriberBody = zod.object({
+  email: zod.string().email(),
+});
+
+/**
+ * @summary Get editable site content
+ */
+export const GetSiteContentResponse = zod.object({
+  heroHeadline: zod.string(),
+  heroSubheading: zod.string(),
+  heroCtaPrimary: zod.string(),
+  heroCtaSecondary: zod.string(),
+  whatsappNumber: zod.string(),
+  contactEmail: zod.string(),
+});
+
+/**
+ * @summary Update editable site content
+ */
+
+export const UpdateSiteContentBody = zod.object({
+  heroHeadline: zod.string().min(1),
+  heroSubheading: zod.string().min(1),
+  heroCtaPrimary: zod.string().min(1),
+  heroCtaSecondary: zod.string().min(1),
+  whatsappNumber: zod.string().min(1),
+  contactEmail: zod.string().min(1),
+});
+
+export const UpdateSiteContentResponse = zod.object({
+  heroHeadline: zod.string(),
+  heroSubheading: zod.string(),
+  heroCtaPrimary: zod.string(),
+  heroCtaSecondary: zod.string(),
+  whatsappNumber: zod.string(),
+  contactEmail: zod.string(),
+});

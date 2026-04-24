@@ -1,9 +1,12 @@
 import { useSEO } from "@/hooks/use-seo";
 import { FaInstagram, FaTwitter, FaTiktok, FaFacebookF, FaMapMarkerAlt, FaEnvelope, FaPhone } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { useGetSiteContent } from "@workspace/api-client-react";
 
 export default function Contact() {
   useSEO("Contact Us", "Get in touch with TBOY'S atelier.");
+  const { data: site } = useGetSiteContent();
+  const contactEmail = site?.contactEmail ?? "atelier@tboys.com";
 
   return (
     <div className="min-h-screen pt-32 pb-24">
@@ -26,7 +29,7 @@ export default function Contact() {
                     <FaEnvelope className="w-5 h-5 mt-1 text-primary" />
                     <div>
                       <p className="font-medium text-foreground">Email</p>
-                      <a href="mailto:atelier@tboys.com">atelier@tboys.com</a>
+                      <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
                     </div>
                   </div>
                   <div className="flex items-start gap-4 text-muted-foreground hover:text-foreground transition-colors">

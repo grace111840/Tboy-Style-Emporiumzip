@@ -10,6 +10,12 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: products
+    description: Product catalog operations
+  - name: subscribers
+    description: Newsletter subscribers
+  - name: site-content
+    description: Editable site content
 paths:
   /healthz:
     get:
@@ -24,6 +30,157 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /products:
+    get:
+      operationId: listProducts
+      tags: [products]
+      summary: List products
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      operationId: createProduct
+      tags: [products]
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+  /products/{id}:
+    get:
+      operationId: getProduct
+      tags: [products]
+      summary: Get a product by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateProduct
+      tags: [products]
+      summary: Update a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteProduct
+      tags: [products]
+      summary: Delete a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+  /subscribers:
+    get:
+      operationId: listSubscribers
+      tags: [subscribers]
+      summary: List subscribers
+      responses:
+        "200":
+          description: Subscribers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subscriber"
+    post:
+      operationId: createSubscriber
+      tags: [subscribers]
+      summary: Subscribe an email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriberInput"
+      responses:
+        "201":
+          description: Subscribed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscriber"
+  /site-content:
+    get:
+      operationId: getSiteContent
+      tags: [site-content]
+      summary: Get editable site content
+      responses:
+        "200":
+          description: Site content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteContent"
+    patch:
+      operationId: updateSiteContent
+      tags: [site-content]
+      summary: Update editable site content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SiteContentInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteContent"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +190,139 @@ components:
           type: string
       required:
         - status
-
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
+          enum: [Casual, Luxury, Streetwear, Formal]
+        image:
+          type: string
+        description:
+          type: string
+        sizes:
+          type: array
+          items:
+            type: string
+        popularity:
+          type: integer
+      required:
+        - id
+        - name
+        - price
+        - category
+        - image
+        - description
+        - sizes
+        - popularity
+    ProductInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        price:
+          type: number
+          minimum: 0
+        category:
+          type: string
+          enum: [Casual, Luxury, Streetwear, Formal]
+        image:
+          type: string
+          minLength: 1
+        description:
+          type: string
+        sizes:
+          type: array
+          items:
+            type: string
+        popularity:
+          type: integer
+          minimum: 0
+          maximum: 100
+      required:
+        - name
+        - price
+        - category
+        - image
+        - description
+        - sizes
+        - popularity
+    Subscriber:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - email
+        - createdAt
+    SubscriberInput:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
+    SiteContent:
+      type: object
+      properties:
+        heroHeadline:
+          type: string
+        heroSubheading:
+          type: string
+        heroCtaPrimary:
+          type: string
+        heroCtaSecondary:
+          type: string
+        whatsappNumber:
+          type: string
+        contactEmail:
+          type: string
+      required:
+        - heroHeadline
+        - heroSubheading
+        - heroCtaPrimary
+        - heroCtaSecondary
+        - whatsappNumber
+        - contactEmail
+    SiteContentInput:
+      type: object
+      properties:
+        heroHeadline:
+          type: string
+          minLength: 1
+        heroSubheading:
+          type: string
+          minLength: 1
+        heroCtaPrimary:
+          type: string
+          minLength: 1
+        heroCtaSecondary:
+          type: string
+          minLength: 1
+        whatsappNumber:
+          type: string
+          minLength: 1
+        contactEmail:
+          type: string
+          minLength: 1
+      required:
+        - heroHeadline
+        - heroSubheading
+        - heroCtaPrimary
+        - heroCtaSecondary
+        - whatsappNumber
+        - contactEmail

@@ -8,3 +8,85 @@
 export interface HealthStatus {
   status: string;
 }
+
+export type ProductCategory =
+  (typeof ProductCategory)[keyof typeof ProductCategory];
+
+export const ProductCategory = {
+  Casual: "Casual",
+  Luxury: "Luxury",
+  Streetwear: "Streetwear",
+  Formal: "Formal",
+} as const;
+
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  category: ProductCategory;
+  image: string;
+  description: string;
+  sizes: string[];
+  popularity: number;
+}
+
+export type ProductInputCategory =
+  (typeof ProductInputCategory)[keyof typeof ProductInputCategory];
+
+export const ProductInputCategory = {
+  Casual: "Casual",
+  Luxury: "Luxury",
+  Streetwear: "Streetwear",
+  Formal: "Formal",
+} as const;
+
+export interface ProductInput {
+  /** @minLength 1 */
+  name: string;
+  /** @minimum 0 */
+  price: number;
+  category: ProductInputCategory;
+  /** @minLength 1 */
+  image: string;
+  description: string;
+  sizes: string[];
+  /**
+   * @minimum 0
+   * @maximum 100
+   */
+  popularity: number;
+}
+
+export interface Subscriber {
+  id: number;
+  email: string;
+  createdAt: string;
+}
+
+export interface SubscriberInput {
+  email: string;
+}
+
+export interface SiteContent {
+  heroHeadline: string;
+  heroSubheading: string;
+  heroCtaPrimary: string;
+  heroCtaSecondary: string;
+  whatsappNumber: string;
+  contactEmail: string;
+}
+
+export interface SiteContentInput {
+  /** @minLength 1 */
+  heroHeadline: string;
+  /** @minLength 1 */
+  heroSubheading: string;
+  /** @minLength 1 */
+  heroCtaPrimary: string;
+  /** @minLength 1 */
+  heroCtaSecondary: string;
+  /** @minLength 1 */
+  whatsappNumber: string;
+  /** @minLength 1 */
+  contactEmail: string;
+}

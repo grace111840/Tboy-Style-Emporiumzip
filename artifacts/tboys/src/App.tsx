@@ -13,6 +13,7 @@ import Collections from "@/pages/Collections";
 import Shop from "@/pages/Shop";
 import ProductDetail from "@/pages/ProductDetail";
 import Contact from "@/pages/Contact";
+import Admin from "@/pages/Admin";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ function Router() {
           <Route path="/shop" component={Shop} />
           <Route path="/product/:id" component={ProductDetail} />
           <Route path="/contact" component={Contact} />
+          <Route path="/admin" component={Admin} />
           <Route component={NotFound} />
         </Switch>
       </main>

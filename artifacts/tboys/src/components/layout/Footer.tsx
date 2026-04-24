@@ -1,7 +1,34 @@
 import { Link } from "wouter";
 import { FaInstagram, FaTwitter, FaTiktok, FaFacebookF } from "react-icons/fa";
+import { useState } from "react";
+import { useCreateSubscriber } from "@workspace/api-client-react";
+import { useToast } from "@/hooks/use-toast";
 
 export function Footer() {
+  const [email, setEmail] = useState("");
+  const { mutateAsync: subscribe, isPending } = useCreateSubscriber();
+  const { toast } = useToast();
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = email.trim();
+    if (!trimmed) return;
+    try {
+      await subscribe({ data: { email: trimmed } });
+      setEmail("");
+      toast({
+        title: "You're on the list",
+        description: "Welcome to the atelier — exclusive previews are on the way.",
+      });
+    } catch (err) {
+      toast({
+        title: "Could not subscribe",
+        description: "Please check your email address and try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <footer className="bg-background border-t border-border pt-20 pb-10">
       <div className="container mx-auto px-4 md:px-6">
@@ -52,14 +79,21 @@ export function Footer() {
           <div>
             <h4 className="font-serif text-lg mb-6">The Atelier</h4>
             <p className="text-muted-foreground text-sm mb-4">Subscribe to receive updates, access to exclusive deals, and more.</p>
-            <form className="flex" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                type="email" 
-                placeholder="Enter your email address" 
+            <form className="flex" onSubmit={handleSubscribe}>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email address"
                 className="bg-transparent border-b border-border py-2 px-0 text-sm w-full focus:outline-none focus:border-primary transition-colors rounded-none placeholder:text-muted-foreground/60"
               />
-              <button type="submit" className="border-b border-border py-2 px-4 text-sm font-medium hover:text-primary hover:border-primary transition-colors">
-                SUBSCRIBE
+              <button
+                type="submit"
+                disabled={isPending}
+                className="border-b border-border py-2 px-4 text-sm font-medium hover:text-primary hover:border-primary transition-colors disabled:opacity-50"
+              >
+                {isPending ? "…" : "SUBSCRIBE"}
               </button>
             </form>
           </div>

@@ -1,7 +1,9 @@
 import { FaWhatsapp } from "react-icons/fa";
+import { useGetSiteContent } from "@workspace/api-client-react";
 
 export function WhatsAppButton() {
-  const phoneNumber = "+1234567890";
+  const { data: site } = useGetSiteContent();
+  const phoneNumber = (site?.whatsappNumber ?? "1234567890").replace(/[^0-9]/g, "");
   const message = encodeURIComponent("Hello! I'm interested in TBOY'S collections and would like to know more.");
   const waLink = `https://wa.me/${phoneNumber}?text=${message}`;
 
