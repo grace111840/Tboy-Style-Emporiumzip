@@ -1,7 +1,8 @@
 import { Link, useLocation } from "wouter";
-import { ShoppingBag, Menu, X, Heart } from "lucide-react";
+import { ShoppingBag, Menu, X, Heart, Sun, Moon } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { useWishlist } from "@/hooks/use-wishlist";
+import { useTheme } from "@/hooks/use-theme";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,7 @@ export function Navbar() {
   const [location] = useLocation();
   const { totalItems, setIsOpen } = useCart();
   const { count: wishlistCount } = useWishlist();
+  const { theme, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -67,6 +69,14 @@ export function Navbar() {
             </div>
 
             <div className="flex items-center space-x-1 md:space-x-3">
+              <button
+                onClick={toggleTheme}
+                className="p-2 text-foreground hover:text-gold transition-colors"
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
               <Link
                 href="/wishlist"
                 className="p-2 relative text-foreground hover:text-gold transition-colors"

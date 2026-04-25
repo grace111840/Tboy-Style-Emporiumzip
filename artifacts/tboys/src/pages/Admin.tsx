@@ -58,7 +58,9 @@ export default function Admin() {
   const deleteProduct = useDeleteProduct();
   const updateSite = useUpdateSiteContent();
 
-  const [tab, setTab] = useState<"products" | "site" | "subscribers">("products");
+  const [tab, setTab] = useState<"prices" | "products" | "site" | "subscribers">("prices");
+  const [priceDrafts, setPriceDrafts] = useState<Record<string, { price: number; oldPrice: number | null; stockCount: number }>>({});
+  const [savingId, setSavingId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState({ ...EMPTY_DRAFT });
   const [showForm, setShowForm] = useState(false);
@@ -188,6 +190,7 @@ export default function Admin() {
 
         <div className="flex gap-1 border-b border-border mb-10 overflow-x-auto">
           {[
+            { id: "prices", label: "Quick Prices & Stock" },
             { id: "products", label: `Products (${products.length})` },
             { id: "site", label: "Site Content" },
             { id: "subscribers", label: `Subscribers (${subscribers.length})` },
@@ -205,6 +208,139 @@ export default function Admin() {
             </button>
           ))}
         </div>
+
+        {tab === "prices" && (
+          <div className="space-y-6">
+            <div className="flex justify-between items-end">
+              <div>
+                <h2 className="font-serif text-2xl">Quick Price & Stock Editor</h2>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Edit prices, sale prices, and stock counts inline. Click <span className="text-gold font-semibold">Save</span> on each row to update.
+                </p>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto bg-background border border-border">
+              <table className="w-full text-sm">
+                <thead className="bg-secondary/40 text-left">
+                  <tr>
+                    <th className="px-4 py-3 font-medium"></th>
+                    <th className="px-4 py-3 font-medium">Product</th>
+                    <th className="px-4 py-3 font-medium text-right w-36">Price (₦)</th>
+                    <th className="px-4 py-3 font-medium text-right w-36">Sale Was (₦)</th>
+                    <th className="px-4 py-3 font-medium text-right w-28">Stock</th>
+                    <th className="px-4 py-3 font-medium text-right w-32">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(products as Product[]).map((p) => {
+                    const draft = priceDrafts[p.id] ?? { price: p.price, oldPrice: p.oldPrice ?? null, stockCount: p.stockCount };
+                    const dirty =
+                      draft.price !== p.price ||
+                      draft.oldPrice !== (p.oldPrice ?? null) ||
+                      draft.stockCount !== p.stockCount;
+                    const setField = (patch: Partial<typeof draft>) =>
+                      setPriceDrafts((d) => ({ ...d, [p.id]: { ...draft, ...patch } }));
+                    return (
+                      <tr key={p.id} className="border-t border-border hover:bg-secondary/20">
+                        <td className="px-4 py-3 w-16">
+                          <img src={p.image} alt={p.name} className="w-12 h-14 object-cover" />
+                        </td>
+                        <td className="px-4 py-3">
+                          <p className="font-medium">{p.name}</p>
+                          <p className="text-xs text-muted-foreground">{p.category}</p>
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <Input
+                            type="number"
+                            min={0}
+                            step={500}
+                            value={draft.price}
+                            onChange={(e) => setField({ price: Number(e.target.value) })}
+                            className="rounded-none text-right"
+                          />
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <Input
+                            type="number"
+                            min={0}
+                            step={500}
+                            value={draft.oldPrice ?? ""}
+                            placeholder="—"
+                            onChange={(e) => setField({ oldPrice: e.target.value ? Number(e.target.value) : null })}
+                            className="rounded-none text-right"
+                          />
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <Input
+                            type="number"
+                            min={0}
+                            value={draft.stockCount}
+                            onChange={(e) => setField({ stockCount: Number(e.target.value) })}
+                            className="rounded-none text-right"
+                          />
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <Button
+                            type="button"
+                            size="sm"
+                            disabled={!dirty || savingId === p.id}
+                            onClick={async () => {
+                              setSavingId(p.id);
+                              try {
+                                await updateProduct.mutateAsync({
+                                  id: p.id,
+                                  data: {
+                                    name: p.name,
+                                    price: draft.price,
+                                    oldPrice: draft.oldPrice,
+                                    category: p.category,
+                                    image: p.image,
+                                    description: p.description,
+                                    styleTip: p.styleTip ?? "",
+                                    sizes: p.sizes,
+                                    popularity: p.popularity,
+                                    stockCount: draft.stockCount,
+                                    isNew: p.isNew,
+                                  },
+                                });
+                                await queryClient.invalidateQueries({ queryKey: getListProductsQueryKey() });
+                                setPriceDrafts((d) => {
+                                  const next = { ...d };
+                                  delete next[p.id];
+                                  return next;
+                                });
+                                toast({ title: "Saved", description: p.name });
+                              } catch (err) {
+                                toast({
+                                  title: "Could not save",
+                                  description: err instanceof Error ? err.message : "Please try again.",
+                                  variant: "destructive",
+                                });
+                              } finally {
+                                setSavingId(null);
+                              }
+                            }}
+                            className={`rounded-none text-xs ${dirty ? "bg-gold text-black hover:bg-gold-soft" : ""}`}
+                          >
+                            {savingId === p.id ? "Saving…" : dirty ? "Save" : "Saved"}
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  {products.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-12 text-center text-muted-foreground">
+                        No pieces yet — add some in the Products tab.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         {tab === "products" && (
           <div className="space-y-6">

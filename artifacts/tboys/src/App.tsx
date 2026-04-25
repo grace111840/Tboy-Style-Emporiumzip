@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/hooks/use-cart";
 import { WishlistProvider } from "@/hooks/use-wishlist";
+import { ThemeProvider } from "@/hooks/use-theme";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/layout/CartDrawer";
@@ -55,6 +56,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <ThemeProvider>
         <WishlistProvider>
           <CartProvider>
             <WouterRouter base={import.meta.env.BASE_URL?.replace(/\/$/, "") || ""}>
@@ -63,6 +65,7 @@ function App() {
             <Toaster />
           </CartProvider>
         </WishlistProvider>
+        </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
