@@ -4,10 +4,10 @@ import { CATEGORIES, type Category, type Product } from "@/data/products";
 import { useListProducts } from "@workspace/api-client-react";
 
 const collectionDescriptions: Record<Category, string> = {
-  Casual: "Elevated essentials for everyday refinement.",
-  Luxury: "Avant-garde silhouettes and pristine fabrics.",
-  Streetwear: "Modern utility meets high-end construction.",
-  Formal: "Impeccable tailoring for your most decisive moments.",
+  Casual: "Elevated everyday essentials, crafted for the cool.",
+  Luxury: "Avant-garde silhouettes. Pristine fabrics. Statement pieces.",
+  Streetwear: "Modern utility meets premium construction.",
+  Formal: "Impeccable Lagos tailoring for your moments that matter.",
 };
 
 const fallbackImages: Record<Category, string> = {
@@ -18,7 +18,7 @@ const fallbackImages: Record<Category, string> = {
 };
 
 export default function Collections() {
-  useSEO("Collections", "Explore TBOY'S curated collections spanning Casual, Luxury, Streetwear, and Formal attire.");
+  useSEO("Collections — TBOY'S Clothing", "Explore TBOY'S collections — Casual, Luxury, Streetwear, Formal. Lagos-crafted, world-ready.");
 
   const { data: products = [] } = useListProducts();
   const list = products as Product[];
@@ -28,17 +28,20 @@ export default function Collections() {
     return first?.image ?? fallbackImages[cat];
   };
 
+  const countFor = (cat: Category): number => list.filter((p) => p.category === cat).length;
+
   return (
-    <div className="min-h-screen pt-24 pb-20">
-      <div className="container mx-auto px-4 md:px-6 mb-16 md:mb-24 text-center mt-12 animate-in fade-in slide-in-from-bottom-4">
-        <h1 className="font-serif text-4xl md:text-6xl mb-6">Curated Collections</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto text-lg font-light">
-          Four distinct visions of modern elegance. United by an uncompromising commitment to craft and poise.
+    <div className="min-h-screen pt-12 pb-20">
+      <div className="container mx-auto px-4 md:px-6 mb-16 md:mb-20 text-center max-w-3xl animate-in fade-in slide-in-from-bottom-4">
+        <p className="text-xs tracking-[0.5em] text-gold uppercase mb-4">Curated For You</p>
+        <h1 className="font-serif text-4xl md:text-6xl font-bold mb-5">Our Collections</h1>
+        <p className="text-muted-foreground text-lg leading-relaxed">
+          Four distinct visions of modern Nigerian fashion. United by craft. Designed to be remembered.
         </p>
       </div>
 
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
           {CATEGORIES.map((category) => (
             <Link
               key={category}
@@ -48,17 +51,20 @@ export default function Collections() {
               <img
                 src={imageFor(category)}
                 alt={`${category} Collection`}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20 group-hover:from-black/80 transition-colors duration-500" />
 
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center">
-                <h2 className="font-serif text-3xl md:text-5xl mb-4 tracking-wide translate-y-4 group-hover:translate-y-0 transition-transform duration-500">{category}</h2>
-                <p className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-sm md:text-base font-light tracking-wide max-w-xs delay-100">
+              <div className="absolute inset-0 flex flex-col items-center justify-end text-white p-8 md:p-10 text-center">
+                <p className="text-xs tracking-[0.4em] text-gold uppercase mb-3">{countFor(category)} Pieces</p>
+                <h2 className="font-serif text-4xl md:text-6xl font-bold mb-4 leading-tight">{category}</h2>
+                <p className="text-sm md:text-base font-light tracking-wide max-w-xs text-white/85 mb-6">
                   {collectionDescriptions[category]}
                 </p>
-                <div className="mt-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
-                  <span className="text-xs tracking-widest uppercase border-b border-white pb-1">Explore</span>
+                <div>
+                  <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase pb-1 border-b border-gold text-gold group-hover:px-3 group-hover:bg-gold group-hover:text-black transition-all duration-300">
+                    Shop {category}
+                  </span>
                 </div>
               </div>
             </Link>

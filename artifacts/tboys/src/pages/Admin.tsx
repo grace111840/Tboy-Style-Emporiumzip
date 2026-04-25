@@ -33,11 +33,15 @@ import { Trash2, Pencil, Plus, X } from "lucide-react";
 const EMPTY_DRAFT = {
   name: "",
   price: 0,
+  oldPrice: null as number | null,
   category: "Casual" as Category,
   image: "/images/casual-1.png",
   description: "",
+  styleTip: "" as string,
   sizes: ["S", "M", "L", "XL"] as string[],
   popularity: 80,
+  stockCount: 10,
+  isNew: false,
 };
 
 export default function Admin() {
@@ -69,11 +73,15 @@ export default function Admin() {
       setDraft({
         name: editingProduct.name,
         price: editingProduct.price,
+        oldPrice: editingProduct.oldPrice ?? null,
         category: editingProduct.category,
         image: editingProduct.image,
         description: editingProduct.description,
+        styleTip: editingProduct.styleTip ?? "",
         sizes: editingProduct.sizes,
         popularity: editingProduct.popularity,
+        stockCount: editingProduct.stockCount,
+        isNew: editingProduct.isNew,
       });
       setShowForm(true);
     }
@@ -129,6 +137,8 @@ export default function Admin() {
     heroCtaSecondary: "",
     whatsappNumber: "",
     contactEmail: "",
+    promoBanner: "",
+    tagline: "",
   });
   const [siteInitialized, setSiteInitialized] = useState(false);
 
@@ -141,6 +151,8 @@ export default function Admin() {
         heroCtaSecondary: site.heroCtaSecondary,
         whatsappNumber: site.whatsappNumber,
         contactEmail: site.contactEmail,
+        promoBanner: site.promoBanner ?? "",
+        tagline: site.tagline ?? "",
       });
       setSiteInitialized(true);
     }
@@ -219,8 +231,12 @@ export default function Admin() {
                     <Input id="name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} required className="rounded-none mt-2" />
                   </div>
                   <div>
-                    <Label htmlFor="price">Price (USD)</Label>
-                    <Input id="price" type="number" min={0} step={1} value={draft.price} onChange={(e) => setDraft({ ...draft, price: Number(e.target.value) })} required className="rounded-none mt-2" />
+                    <Label htmlFor="price">Price (₦)</Label>
+                    <Input id="price" type="number" min={0} step={500} value={draft.price} onChange={(e) => setDraft({ ...draft, price: Number(e.target.value) })} required className="rounded-none mt-2" />
+                  </div>
+                  <div>
+                    <Label htmlFor="oldPrice">Compare-at Price (₦, optional)</Label>
+                    <Input id="oldPrice" type="number" min={0} step={500} value={draft.oldPrice ?? ""} onChange={(e) => setDraft({ ...draft, oldPrice: e.target.value ? Number(e.target.value) : null })} className="rounded-none mt-2" placeholder="Leave empty if no discount" />
                   </div>
                   <div>
                     <Label htmlFor="category">Category</Label>
@@ -244,6 +260,22 @@ export default function Admin() {
                     <Label htmlFor="popularity">Popularity (0–100)</Label>
                     <Input id="popularity" type="number" min={0} max={100} value={draft.popularity} onChange={(e) => setDraft({ ...draft, popularity: Number(e.target.value) })} required className="rounded-none mt-2" />
                   </div>
+                  <div>
+                    <Label htmlFor="stockCount">Stock Count</Label>
+                    <Input id="stockCount" type="number" min={0} value={draft.stockCount} onChange={(e) => setDraft({ ...draft, stockCount: Number(e.target.value) })} required className="rounded-none mt-2" />
+                    <p className="text-xs text-muted-foreground mt-1">Pieces ≤ 5 show "Only X left" urgency badge</p>
+                  </div>
+                  <div className="flex items-end pb-1">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={draft.isNew}
+                        onChange={(e) => setDraft({ ...draft, isNew: e.target.checked })}
+                        className="w-5 h-5 accent-[hsl(42_70%_55%)]"
+                      />
+                      <span className="text-sm">Mark as NEW (shows New badge)</span>
+                    </label>
+                  </div>
                   <div className="md:col-span-2">
                     <Label htmlFor="sizes">Sizes (comma-separated)</Label>
                     <Input
@@ -256,6 +288,10 @@ export default function Admin() {
                   <div className="md:col-span-2">
                     <Label htmlFor="description">Description</Label>
                     <Textarea id="description" rows={4} value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} required className="rounded-none mt-2" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <Label htmlFor="styleTip">Style Tip (optional)</Label>
+                    <Textarea id="styleTip" rows={2} value={draft.styleTip} onChange={(e) => setDraft({ ...draft, styleTip: e.target.value })} className="rounded-none mt-2" placeholder="How to style this piece — appears in a gold callout on the product page." />
                   </div>
                   <div className="md:col-span-2 flex justify-end gap-3 pt-2">
                     <Button type="button" variant="outline" onClick={resetForm} className="rounded-none">Cancel</Button>
@@ -275,7 +311,7 @@ export default function Admin() {
                     <th className="px-4 py-3 font-medium">Name</th>
                     <th className="px-4 py-3 font-medium">Category</th>
                     <th className="px-4 py-3 font-medium text-right">Price</th>
-                    <th className="px-4 py-3 font-medium text-right">Popularity</th>
+                    <th className="px-4 py-3 font-medium text-right">Stock</th>
                     <th className="px-4 py-3 font-medium text-right">Actions</th>
                   </tr>
                 </thead>
@@ -287,8 +323,8 @@ export default function Admin() {
                       </td>
                       <td className="px-4 py-3 font-medium">{p.name}</td>
                       <td className="px-4 py-3 text-muted-foreground">{p.category}</td>
-                      <td className="px-4 py-3 text-right">${p.price}</td>
-                      <td className="px-4 py-3 text-right text-muted-foreground">{p.popularity}</td>
+                      <td className="px-4 py-3 text-right">₦{p.price.toLocaleString("en-NG")}</td>
+                      <td className="px-4 py-3 text-right text-muted-foreground">{p.stockCount}</td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex justify-end gap-1">
                           <button
@@ -333,6 +369,14 @@ export default function Admin() {
               <div>
                 <Label htmlFor="heroSubheading">Hero Subheading</Label>
                 <Textarea id="heroSubheading" rows={2} value={siteDraft.heroSubheading} onChange={(e) => setSiteDraft({ ...siteDraft, heroSubheading: e.target.value })} required className="rounded-none mt-2" />
+              </div>
+              <div>
+                <Label htmlFor="promoBanner">Promo Banner (top of every page)</Label>
+                <Input id="promoBanner" value={siteDraft.promoBanner} onChange={(e) => setSiteDraft({ ...siteDraft, promoBanner: e.target.value })} className="rounded-none mt-2" placeholder="GET 10% OFF YOUR FIRST ORDER — USE CODE TBOYS10" />
+              </div>
+              <div>
+                <Label htmlFor="tagline">Tagline (footer + about section)</Label>
+                <Input id="tagline" value={siteDraft.tagline} onChange={(e) => setSiteDraft({ ...siteDraft, tagline: e.target.value })} className="rounded-none mt-2" placeholder="Wear the moment. Own the room." />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
