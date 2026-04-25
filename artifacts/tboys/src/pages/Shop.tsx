@@ -14,12 +14,14 @@ export default function Shop() {
   const searchString = useSearch();
   const searchParams = new URLSearchParams(searchString);
   const initialCategory = searchParams.get("category") || "All";
+  const initialQuery = searchParams.get("q") || "";
 
   const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
   const [sortBy, setSortBy] = useState<string>("featured");
   const [maxPrice, setMaxPrice] = useState<number>(MAX_PRICE);
   const [onlyNew, setOnlyNew] = useState(false);
   const [onlySale, setOnlySale] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<string>(initialQuery);
 
   const { data: products = [], isLoading } = useListProducts();
 
@@ -28,6 +30,16 @@ export default function Shop() {
 
     if (activeCategory !== "All") {
       result = result.filter((p) => p.category === activeCategory);
+    }
+
+    if (searchTerm.trim()) {
+      const q = searchTerm.trim().toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          (p.description ?? "").toLowerCase().includes(q),
+      );
     }
 
     if (onlyNew) result = result.filter((p) => p.isNew);
@@ -53,7 +65,7 @@ export default function Shop() {
     }
 
     return result;
-  }, [products, activeCategory, sortBy, maxPrice, onlyNew, onlySale]);
+  }, [products, activeCategory, sortBy, maxPrice, onlyNew, onlySale, searchTerm]);
 
   return (
     <div className="min-h-screen pt-12 pb-24">
@@ -65,6 +77,19 @@ export default function Shop() {
             Premium pieces, hand-crafted in Lagos. Use code <span className="text-gold font-bold">TBOYS10</span> for 10% off your first order.
           </p>
         </div>
+
+        {searchTerm.trim() && (
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <span className="text-sm text-muted-foreground">Showing results for</span>
+            <span className="text-sm font-semibold text-gold">"{searchTerm}"</span>
+            <button
+              onClick={() => setSearchTerm("")}
+              className="text-xs uppercase tracking-wider px-3 py-1 border border-border hover:border-gold hover:text-gold transition-colors"
+            >
+              Clear
+            </button>
+          </div>
+        )}
 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-y border-border py-5 mb-12 gap-6">
           <div className="flex overflow-x-auto w-full md:w-auto space-x-6 pb-1 md:pb-0 scrollbar-hide">

@@ -1,0 +1,83 @@
+
+Fix the navigation bar layout issue on my fashion website for **TBOY'S Clothing Brand**.
+
+**Current Problem:**
+
+* The “TBOY’S” logo/text in the navbar is overlapping with other menu items like “FAQ” and “Admin”
+* This makes those sections partially hidden and not accessible
+* The layout breaks especially on smaller screens
+
+**Required Fix:**
+
+* Adjust the navbar layout so all elements are clearly visible and properly spaced
+* Do one of the following (choose the best UI/UX approach):
+
+  1. Move the “TBOY’S” logo slightly downward so it sits below the navigation links (centered)
+  2. OR reposition the “TBOY’S” logo to the left or center while pushing menu items to the sides using flexbox/grid
+  3. Ensure no overlapping occurs at any screen size
+
+**Technical Instructions:**
+
+* Use proper Flexbox or CSS Grid for alignment
+* Ensure spacing with `justify-content: space-between` or similar
+* Add responsive breakpoints for mobile and tablet
+* Keep the navbar clean, elegant, and balanced
+* Maintain accessibility (all links clickable and visible)
+
+**Design Improvements (Important):**
+
+* Keep a luxury minimalist look
+* Add subtle hover effects on nav links
+* Ensure consistent padding and spacing
+* Make navbar sticky with a smooth scroll effect
+
+---
+
+**Suggested Layout (Recommended Best Option):**
+
+* Left: Logo (TBOY’S)
+* Center: Navigation (Shop, Collections, Lookbook, FAQ, Admin)
+* Right: Icons (theme toggle, wishlist, cart)
+
+---
+
+**Also Improve the Website By Adding:**
+
+1. **Search Bar**
+
+   * Helps users quickly find products
+
+2. **Wishlist Feature**
+
+   * Save favorite items (icon already exists—make it functional)
+
+3. **Product Quick View**
+
+   * Hover popup to preview items without leaving the page
+
+4. **Testimonials Section (Home Page)**
+
+   * Adds credibility and luxury feel
+
+5. **Newsletter Signup**
+
+   * “Get 10% off” section tied to email capture
+
+6. **Footer Upgrade**
+
+   * Include:
+
+     * About the brand
+     * Quick links
+     * Social media
+     * Contact info
+
+7. **Loading Animations**
+
+   * Smooth fade-ins for images and sections
+
+8. **Mobile Menu (Hamburger)**
+
+   * Clean collapsible menu for small screens
+
+
