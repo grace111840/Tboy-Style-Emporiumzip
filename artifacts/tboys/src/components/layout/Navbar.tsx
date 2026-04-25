@@ -39,37 +39,39 @@ export function Navbar() {
         )}
       >
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between">
-            <button
-              className="md:hidden p-2 -ml-2 text-foreground hover:text-gold transition-colors"
-              onClick={() => setIsMobileMenuOpen(true)}
-              aria-label="Open menu"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
+          <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-3 items-center gap-3">
+            <div className="flex items-center md:justify-self-start">
+              <button
+                className="md:hidden p-2 -ml-2 text-foreground hover:text-gold transition-colors"
+                onClick={() => setIsMobileMenuOpen(true)}
+                aria-label="Open menu"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
 
-            <nav className="hidden md:flex items-center space-x-7">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "text-xs font-semibold tracking-[0.2em] uppercase transition-colors",
-                    location === link.href ? "text-gold" : "hover:text-gold",
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
+              <nav className="hidden md:flex items-center space-x-5 lg:space-x-7">
+                {NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "text-xs font-semibold tracking-[0.2em] uppercase transition-colors",
+                      location === link.href ? "text-gold" : "hover:text-gold",
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
 
-            <div className="absolute left-1/2 transform -translate-x-1/2">
-              <Link href="/" className="font-serif text-2xl md:text-3xl font-bold tracking-[0.25em] text-gold">
+            <div className="flex justify-center min-w-0">
+              <Link href="/" className="font-serif text-xl md:text-2xl lg:text-3xl font-bold tracking-[0.25em] text-gold whitespace-nowrap">
                 TBOY'S
               </Link>
             </div>
 
-            <div className="flex items-center space-x-1 md:space-x-3">
+            <div className="flex items-center justify-end space-x-1 md:space-x-3">
               <button
                 onClick={toggleTheme}
                 className="p-2 text-foreground hover:text-gold transition-colors"
