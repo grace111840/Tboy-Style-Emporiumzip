@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: "/collections", label: "Collections" },
   { href: "/lookbook", label: "Lookbook" },
   { href: "/faq", label: "FAQ" },
+  { href: "/admin", label: "Admin" },
 ];
 
 export function Navbar() {
